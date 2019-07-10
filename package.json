@@ -1,0 +1,25 @@
+{
+  "private": true,
+  "name": "@night-watch/watch-scheduler",
+  "description": "Night Watch watch scheduler",
+  "author": "Night Watch Project",
+  "license": "MIT",
+  "repository": "github:night-watch-project/watch-scheduler",
+  "version": "0.0.1",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "NODE_ENV=development node src/server",
+    "start": "NODE_ENV=production node src/server"
+  },
+  "dependencies": {
+    "agenda": "^2.0.2",
+    "axios": "^0.19.0",
+    "dotenv-flow": "^3.0.0-rc.1",
+    "fastify": "^2.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.0.1",
+    "eslint-plugin-react": "^7.14.2",
+    "eslint-plugin-react-hooks": "^1.6.1"
+  }
+}
