@@ -1,10 +1,10 @@
 {
   "private": true,
-  "name": "@night-watch-project/watch-scheduler",
-  "description": "Night Watch watch scheduler",
+  "name": "@night-watch-project/scheduler",
+  "description": "Night Watch scheduler",
   "author": "Night Watch Project",
   "license": "MIT",
-  "repository": "github:night-watch-project/watch-scheduler",
+  "repository": "github:night-watch-project/scheduler",
   "version": "0.0.1",
   "main": "src/server.js",
   "scripts": {
