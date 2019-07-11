@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@night-watch/watch-scheduler",
+  "name": "@night-watch-project/watch-scheduler",
   "description": "Night Watch watch scheduler",
   "author": "Night Watch Project",
   "license": "MIT",

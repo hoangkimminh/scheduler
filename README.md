@@ -1,4 +1,4 @@
-# NIGHT WATCH WATCH SCHEDULER
+# Night Watch watch scheduler
 
 ## INSTALLATION
 
