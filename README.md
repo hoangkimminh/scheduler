@@ -17,6 +17,11 @@ $ yarn start # yarn dev for development
 
 ## DOCUMENTATION
 
+### Environment Variables
+
+- `MONGODB_URI` (string): MongoDB URI
+- `CRAWLER_ADDRESS` (string): Address of crawler service
+
 ### Routes
 
 #### GET `/`
@@ -25,7 +30,7 @@ $ yarn start # yarn dev for development
 
 ##### Response body
 
-- iam: `"/"`
+- `iam`: `"/"`
 
 #### POST `/watch`
 
@@ -33,9 +38,9 @@ $ yarn start # yarn dev for development
 
 ##### Request body
 
-- interval (positive integer): Number of seconds between executions
-- payload (object): Payload passed to the crawler
+- `interval` (positive integer): Number of seconds between executions
+- `payload` (object): Payload passed to the crawler
 
 ##### Response body
 
-- success (boolean): Status
+- `success` (boolean): Status
