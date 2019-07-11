@@ -3,7 +3,6 @@ require('dotenv-flow').config()
 const fastify = require('fastify')
 const Agenda = require('agenda')
 const axios = require('axios')
-const apiRoutes = require('./api/routes')
 
 const loggerLevel = process.env.NODE_ENV !== 'production' ? 'debug' : 'info'
 const server = fastify({ ignoreTrailingSlash: true, logger: { level: loggerLevel } })
@@ -13,12 +12,8 @@ const scheduler = new Agenda({
 })
 
 scheduler.define('execute-watch-session', async (job, done) => {
-  const { url, cssSelectors } = job.attrs.data
   try {
-    const res = await axios.post(`${process.env.CRAWLER_ADDRESS}/api`, {
-      url,
-      cssSelectors
-    })
+    const res = await axios.post(`${process.env.CRAWLER_ADDRESS}`, job.attrs.data)
     const { success } = res.data
     if (success) done()
     else done(new Error('Failed to execute watch session')) // may add more details about the failed session later
@@ -27,10 +22,20 @@ scheduler.define('execute-watch-session', async (job, done) => {
   }
 })
 
-server.register(apiRoutes, { prefix: '/api', scheduler })
-
 server.get('/', async () => {
   return { iam: '/' }
+})
+
+server.post('/watch', async (req) => {
+  const { interval, payload } = req.body
+  try {
+    // req.body.interval in seconds, interval param of scheduler.every() in milliseconds
+    await scheduler.every(interval * 1000, 'execute-watch-session', payload)
+    return { success: true }
+  } catch (err) {
+    req.log.error(err.message)
+    return { success: false }
+  }
 })
 
 const start = async () => {

@@ -17,8 +17,25 @@ $ yarn start # yarn dev for development
 
 ## DOCUMENTATION
 
-| ROUTE        | METHOD | REQ BODY                                                  | RES BODY               | USE                |
-| ------------ | ------ | --------------------------------------------------------- | ---------------------- | ------------------ |
-| `/`          | GET    |                                                           | `{ iam: '/' }`         |
-| `/api`       | GET    |                                                           | `{ iam: '/api' }`      |
-| `/api/watch` | POST   | `{ url: string, cssSelectors: object, interval: number }` | `{ success: boolean }` | Schedule new watch |
+### Routes
+
+#### GET `/`
+
+> Just for testing
+
+##### Response body
+
+- iam: `"/"`
+
+#### POST `/watch`
+
+> Add a new watch
+
+##### Request body
+
+- interval (positive integer): Number of seconds between executions
+- payload (object): Payload passed to the crawler
+
+##### Response body
+
+- success (boolean): Status
