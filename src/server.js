@@ -54,7 +54,7 @@ server.get('/watch', async (req, res) => {
 server.get('/watch/:id', async (req, res) => {
   try {
     const id = req.params.id
-    const job = await scheduler.jobs({name: 'execute-watch-session', _id: id})
+    const job = await scheduler.jobs({name: 'execute-watch-session', _id: new mongo.ObjectID(id)})
     if (job) {
       return {id: id, interval: job.interval, payload: job.payload}
     }
