@@ -39,28 +39,14 @@ server.post('/watch', async (req) => {
   }
 })
 
-server.get('/watch', async (req, res) => {
-  try {
-    const data = await scheduler.jobs({ name: 'execute-watch-session' })
-    const jobs = data.map((job) => {
-      return { id: job._id.str, interval: job.interval, payload: job.payload }
-    })
-    return jobs
-  } catch (err) {
-    return new Error(err)
-  }
-})
-
-server.get('/watch/:id', async (req, res) => {
+server.delete('/watch/:id', async (req, res) => {
   try {
     const id = req.params.id
-    const job = await scheduler.jobs({name: 'execute-watch-session', _id: id})
-    if (job) {
-      return {id: id, interval: job.interval, payload: job.payload}
-    }
-    return "Can't find you watch with id:" + id
+    await scheduler.cancel({name: 'execute-watch-session', _id: new mongo.ObjectID(id)})
+    return {success: true}
   } catch (err) {
-    return new Error(err)
+    req.log.error(err.message)
+    return {success: false}
   }
 })
 
