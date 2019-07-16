@@ -38,6 +38,18 @@ server.post('/watch', async (req) => {
   }
 })
 
+server.get('/watch', async (req, res) => {
+  try {
+    const data = await scheduler.jobs({ name: 'execute-watch-session' })
+    const jobs = data.map((job) => {
+      return { id: job._id.str, interval: job.interval, payload: job.payload }
+    })
+    return jobs
+  } catch (err) {
+    return new Error(err)
+  }
+})
+
 const start = async () => {
   try {
     await Promise.all([
