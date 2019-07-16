@@ -3,6 +3,7 @@ require('dotenv-flow').config()
 const fastify = require('fastify')
 const Agenda = require('agenda')
 const axios = require('axios')
+const mongo = require('mongodb')
 
 const loggerLevel = process.env.NODE_ENV !== 'production' ? 'debug' : 'info'
 const server = fastify({ ignoreTrailingSlash: true, logger: { level: loggerLevel } })
@@ -45,6 +46,19 @@ server.get('/watch', async (req, res) => {
       return { id: job._id.str, interval: job.interval, payload: job.payload }
     })
     return jobs
+  } catch (err) {
+    return new Error(err)
+  }
+})
+
+server.get('/watch/:id', async (req, res) => {
+  try {
+    const id = req.params.id
+    const job = await scheduler.jobs({name: 'execute-watch-session', _id: id})
+    if (job) {
+      return {id: id, interval: job.interval, payload: job.payload}
+    }
+    return "Can't find you watch with id:" + id
   } catch (err) {
     return new Error(err)
   }
