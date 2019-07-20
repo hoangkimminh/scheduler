@@ -31,36 +31,39 @@ server.post('/watch', async (req) => {
   const { interval, payload } = req.body
   try {
     // req.body.interval in seconds, interval param of scheduler.every() in milliseconds
-    await scheduler.every(interval * 1000, 'execute-watch-session', payload)
-    return { success: true }
+    await scheduler.create('execute-watch-session', payload).repeatEvery(interval * 1000).save()
+    res.code(200).send({ success: true })
   } catch (err) {
     req.log.error(err.message)
-    return { success: false }
+    res.code(500).send({ success: false })
   }
 })
 
 server.get('/watch', async (req, res) => {
   try {
     const data = await scheduler.jobs({ name: 'execute-watch-session' })
+    console.log(data)
     const jobs = data.map((job) => {
-      return { id: job._id.str, interval: job.interval, payload: job.payload }
+      const attrs = job.attrs
+      return { id: attrs._id, interval: attrs.repeatInterval, payload: attrs.data }
     })
-    return jobs
+    res.code(200).send(jobs)
   } catch (err) {
-    return new Error(err)
+    res.code(500).send({ success: false })
   }
 })
 
 server.get('/watch/:id', async (req, res) => {
   try {
     const id = req.params.id
-    const job = await scheduler.jobs({name: 'execute-watch-session', _id: new mongo.ObjectID(id)})
+    const job = await scheduler.jobs({ name: 'execute-watch-session', _id: new mongo.ObjectID(id) })
     if (job) {
-      return {id: id, interval: job.interval, payload: job.payload}
+      const attrs = job[0].attrs
+      return { id: attrs._id, interval: attrs.repeatInterval, payload: attrs.data }
     }
-    return "Can't find you watch with id:" + id
+    res.code(500).send({ success: false })
   } catch (err) {
-    return new Error(err)
+    res.code(500).send({ success: false })
   }
 })
 
