@@ -74,7 +74,7 @@ const start = async () => {
       scheduler.start()
     ])
   } catch (err) {
-    server.log.error(err)
+    server.log.error(err.message)
     process.exit(1)
   }
 }
