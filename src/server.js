@@ -43,7 +43,7 @@ server.delete('/watch/:id', async (req, res) => {
   try {
     const id = req.params.id
     await scheduler.cancel({name: 'execute-watch-session', _id: new mongo.ObjectID(id)})
-    res.code(500).send({success: true}) 
+    res.code(200).send({success: true}) 
   } catch (err) {
     req.log.error(err.message)
     res.code(500).send({success: false}) 
