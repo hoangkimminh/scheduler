@@ -27,7 +27,7 @@ server.get('/', async () => {
   return { iam: '/' }
 })
 
-server.post('/watch', async (req) => {
+server.post('/watch', async (req, res) => {
   const { interval, payload } = req.body
   try {
     // req.body.interval in seconds, interval param of scheduler.every() in milliseconds
@@ -65,6 +65,17 @@ server.get('/watch/:id', async (req, res) => {
   } catch (err) {
     req.log.error(err.message)
     res.code(500).send({ success: false })
+  }
+})
+
+server.delete('/watch/:id', async (req, res) => {
+  try {
+    const id = req.params.id
+    await scheduler.cancel({name: 'execute-watch-session', _id: new mongo.ObjectID(id)})
+    res.code(200).send({success: true}) 
+  } catch (err) {
+    req.log.error(err.message)
+    res.code(500).send({success: false}) 
   }
 })
 
