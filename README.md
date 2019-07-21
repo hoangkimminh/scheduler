@@ -53,10 +53,6 @@ Array of objects:
 - `interval` (positive integer): Number of seconds between executions
 - `payload` (object): Payload passed to the crawler
 
-##### Response body
-
-- `success` (boolean): Status
-
 #### GET `/watch/:id`
 
 > Get the active watch with `id`
@@ -78,7 +74,3 @@ Array of objects:
 ##### Route parameters
 
 - `id` (string): ID of the watch
-
-##### Response body
-
-- `success` (boolean): Status
