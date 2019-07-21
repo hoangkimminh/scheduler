@@ -32,10 +32,10 @@ server.post('/watch', async (req, res) => {
   try {
     // req.body.interval in seconds, interval param of scheduler.every() in milliseconds
     await scheduler.create('execute-watch-session', payload).repeatEvery(interval * 1000).save()
-    res.code(200).send({ success: true })
+    res.code(200)
   } catch (err) {
     req.log.error(err.message)
-    res.code(500).send({ success: false })
+    res.code(500)
   }
 })
 
@@ -49,7 +49,7 @@ server.get('/watch', async (req, res) => {
     res.code(200).send(jobs)
   } catch (err) {
     req.log.error(err.message)
-    res.code(500).send({ success: false })
+    res.code(500)
   }
 })
 
@@ -61,10 +61,10 @@ server.get('/watch/:id', async (req, res) => {
       const attrs = jobs[0].attrs
       return { id: attrs._id, interval: attrs.repeatInterval, payload: attrs.data }
     }
-    res.code(500).send({ success: false })
+    res.code(500)
   } catch (err) {
     req.log.error(err.message)
-    res.code(500).send({ success: false })
+    res.code(500)
   }
 })
 
@@ -72,10 +72,10 @@ server.delete('/watch/:id', async (req, res) => {
   try {
     const id = req.params.id
     await scheduler.cancel({name: 'execute-watch-session', _id: new mongo.ObjectID(id)})
-    res.code(200).send({success: true}) 
+    res.code(200)
   } catch (err) {
     req.log.error(err.message)
-    res.code(500).send({success: false}) 
+    res.code(500)
   }
 })
 
