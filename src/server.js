@@ -39,6 +39,35 @@ server.post('/watch', async (req, res) => {
   }
 })
 
+server.get('/watch', async (req, res) => {
+  try {
+    let jobs = await scheduler.jobs({ name: 'execute-watch-session' })
+    jobs = jobs.map((job) => { 
+      const attrs = job.attrs
+      return { id: attrs._id, interval: attrs.repeatInterval, payload: attrs.data }
+    })
+    res.code(200).send(jobs)
+  } catch (err) {
+    req.log.error(err.message)
+    res.code(500).send({ success: false })
+  }
+})
+
+server.get('/watch/:id', async (req, res) => {
+  try {
+    const id = req.params.id
+    const jobs = await scheduler.jobs({ name: 'execute-watch-session', _id: new mongo.ObjectID(id) })
+    if (jobs) {
+      const attrs = jobs[0].attrs
+      return { id: attrs._id, interval: attrs.repeatInterval, payload: attrs.data }
+    }
+    res.code(500).send({ success: false })
+  } catch (err) {
+    req.log.error(err.message)
+    res.code(500).send({ success: false })
+  }
+})
+
 server.delete('/watch/:id', async (req, res) => {
   try {
     const id = req.params.id
