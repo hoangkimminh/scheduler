@@ -31,7 +31,10 @@ server.post('/watch', async (req, res) => {
   const { interval, payload } = req.body
   try {
     // req.body.interval in seconds, interval param of scheduler.every() in milliseconds
-    await scheduler.create('execute-watch-session', payload).repeatEvery(interval * 1000).save()
+    await scheduler
+      .create('execute-watch-session', payload)
+      .repeatEvery(interval * 1000)
+      .save()
     res.code(200)
   } catch (err) {
     req.log.error(err.message)
@@ -42,7 +45,7 @@ server.post('/watch', async (req, res) => {
 server.get('/watch', async (req, res) => {
   try {
     let jobs = await scheduler.jobs({ name: 'execute-watch-session' })
-    jobs = jobs.map((job) => { 
+    jobs = jobs.map((job) => {
       const attrs = job.attrs
       return { id: attrs._id, interval: attrs.repeatInterval, payload: attrs.data }
     })
@@ -56,7 +59,10 @@ server.get('/watch', async (req, res) => {
 server.get('/watch/:id', async (req, res) => {
   try {
     const id = req.params.id
-    const jobs = await scheduler.jobs({ name: 'execute-watch-session', _id: new mongo.ObjectID(id) })
+    const jobs = await scheduler.jobs({
+      name: 'execute-watch-session',
+      _id: new mongo.ObjectID(id)
+    })
     if (jobs) {
       const attrs = jobs[0].attrs
       return { id: attrs._id, interval: attrs.repeatInterval, payload: attrs.data }
@@ -71,7 +77,7 @@ server.get('/watch/:id', async (req, res) => {
 server.delete('/watch/:id', async (req, res) => {
   try {
     const id = req.params.id
-    await scheduler.cancel({name: 'execute-watch-session', _id: new mongo.ObjectID(id)})
+    await scheduler.cancel({ name: 'execute-watch-session', _id: new mongo.ObjectID(id) })
     res.code(200)
   } catch (err) {
     req.log.error(err.message)
@@ -82,7 +88,7 @@ server.delete('/watch/:id', async (req, res) => {
 const start = async () => {
   try {
     await Promise.all([
-      server.listen(process.env.PORT || 3001, '::'), // listen to all IPv6 and IPv4 addresses
+      server.listen(process.env.PORT, '::'), // listen to all IPv6 and IPv4 addresses
       scheduler.start()
     ])
   } catch (err) {
