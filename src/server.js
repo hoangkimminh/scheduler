@@ -5,16 +5,18 @@ const Agenda = require('agenda')
 const axios = require('axios')
 const mongo = require('mongodb')
 
-const loggerLevel = process.env.NODE_ENV !== 'production' ? 'debug' : 'info'
+const { NODE_ENV, PORT, MONGODB_URI, CRAWLER_ADDRESS } = process.env
+
+const loggerLevel = NODE_ENV !== 'production' ? 'debug' : 'info'
 const server = fastify({ ignoreTrailingSlash: true, logger: { level: loggerLevel } })
 const scheduler = new Agenda({
-  db: { address: process.env.MONGODB_URI },
+  db: { address: MONGODB_URI },
   processEvery: '1 minute'
 })
 
 scheduler.define('execute-watch-session', async (job, done) => {
   try {
-    const res = await axios.post(`${process.env.CRAWLER_ADDRESS}`, job.attrs.data)
+    const res = await axios.post(`${CRAWLER_ADDRESS}`, job.attrs.data)
     const { success } = res.data
     if (success) done()
     else done(new Error('Failed to execute watch session')) // may add more details about the failed session later
@@ -88,7 +90,7 @@ server.delete('/watch/:id', async (req, res) => {
 const start = async () => {
   try {
     await Promise.all([
-      server.listen(process.env.PORT, '::'), // listen to all IPv6 and IPv4 addresses
+      server.listen(PORT, '::'), // listen to all IPv6 and IPv4 addresses
       scheduler.start()
     ])
   } catch (err) {
