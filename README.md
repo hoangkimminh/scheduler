@@ -19,6 +19,7 @@ $ yarn start # yarn dev for development
 
 ### Environment Variables
 
+- `PORT` (number): Port number to run the server
 - `MONGODB_URI` (string): MongoDB URI
 - `CRAWLER_ADDRESS` (string): Address of crawler service
 
