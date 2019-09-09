@@ -37,7 +37,7 @@ server.post('/watch', async (req, res) => {
       .create('execute-watch-session', payload)
       .repeatEvery(interval * 1000)
       .save()
-    res.code(200)
+    res.code(204)
   } catch (err) {
     req.log.error(err.message)
     res.code(500)
@@ -80,7 +80,7 @@ server.delete('/watch/:id', async (req, res) => {
   try {
     const id = req.params.id
     await scheduler.cancel({ name: 'execute-watch-session', _id: new mongo.ObjectID(id) })
-    res.code(200)
+    res.code(204)
   } catch (err) {
     req.log.error(err.message)
     res.code(500)
