@@ -13,7 +13,7 @@
     "start": "NODE_ENV=production node src/server"
   },
   "dependencies": {
-    "agenda": "^2.0.2",
+    "agenda": "^2.1.0",
     "axios": "^0.19.0",
     "dotenv-flow": "^3.1.0",
     "fastify": "^2.8.0",
