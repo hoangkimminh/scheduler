@@ -3,7 +3,7 @@ require('dotenv-flow').config()
 const fastify = require('fastify')
 const Agenda = require('agenda')
 const axios = require('axios')
-const mongo = require('mongodb')
+const { ObjectID } = require('mongodb')
 
 const { NODE_ENV, PORT, MONGODB_URI, CRAWLER_ADDRESS } = process.env
 
@@ -29,7 +29,7 @@ server.get('/', async () => {
   return { iam: '/' }
 })
 
-server.post('/watch', async (req, res) => {
+server.post('/watches', async (req, res) => {
   const { interval, payload } = req.body
   try {
     // req.body.interval in seconds, interval param of scheduler.every() in milliseconds
@@ -44,12 +44,12 @@ server.post('/watch', async (req, res) => {
   }
 })
 
-server.get('/watch', async (req, res) => {
+server.get('/watches', async (req, res) => {
   try {
     let jobs = await scheduler.jobs({ name: 'execute-watch-session' })
     jobs = jobs.map((job) => {
-      const attrs = job.attrs
-      return { id: attrs._id, interval: attrs.repeatInterval, payload: attrs.data }
+      const { _id, repeatInterval, data } = job.attrs
+      return { _id, interval: repeatInterval, payload: data }
     })
     res.code(200).send(jobs)
   } catch (err) {
@@ -58,16 +58,13 @@ server.get('/watch', async (req, res) => {
   }
 })
 
-server.get('/watch/:id', async (req, res) => {
+server.get('/watches/:id', async (req, res) => {
   try {
-    const id = req.params.id
-    const jobs = await scheduler.jobs({
-      name: 'execute-watch-session',
-      _id: new mongo.ObjectID(id)
-    })
+    const _id = new ObjectID(req.params.id)
+    const jobs = await scheduler.jobs({ name: 'execute-watch-session', _id })
     if (jobs) {
-      const attrs = jobs[0].attrs
-      return { id: attrs._id, interval: attrs.repeatInterval, payload: attrs.data }
+      const { _id, repeatInterval, data } = jobs[0].attrs
+      return { _id, interval: repeatInterval, payload: data }
     }
     res.code(500)
   } catch (err) {
@@ -76,10 +73,10 @@ server.get('/watch/:id', async (req, res) => {
   }
 })
 
-server.delete('/watch/:id', async (req, res) => {
+server.delete('/watches/:id', async (req, res) => {
   try {
-    const id = req.params.id
-    await scheduler.cancel({ name: 'execute-watch-session', _id: new mongo.ObjectID(id) })
+    const _id = new ObjectID(req.params.id)
+    await scheduler.cancel({ name: 'execute-watch-session', _id })
     res.code(204)
   } catch (err) {
     req.log.error(err.message)
