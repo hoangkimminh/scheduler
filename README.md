@@ -25,7 +25,7 @@ $ yarn start # yarn dev for development
 
 ### Routes
 
-#### GET `/`
+#### 1. GET `/`
 
 > Just for testing
 
@@ -33,7 +33,7 @@ $ yarn start # yarn dev for development
 
 - `iam`: `"/"`
 
-#### GET `/watches`
+#### 2. GET `/watches`
 
 > Get all active watches
 
@@ -45,7 +45,7 @@ Array of objects:
 - `interval` (positive integer): Number of seconds between executions
 - `payload` (any): Payload passed to the crawler
 
-#### POST `/watches`
+#### 3. POST `/watches`
 
 > Schedule a watch
 
@@ -54,7 +54,7 @@ Array of objects:
 - `interval` (positive integer): Number of seconds between executions
 - `payload` (any): Payload passed to the crawler
 
-#### GET `/watches/:id`
+#### 4. GET `/watches/:id`
 
 > Get the active watch with `id`
 
@@ -68,7 +68,7 @@ Array of objects:
 - `interval` (positive integer): Number of seconds between executions
 - `payload` (any): Payload passed to the crawler
 
-#### DELETE `/watches/:id`
+#### 5. DELETE `/watches/:id`
 
 > Delete/disable the active watch with `id`
 
