@@ -73,10 +73,11 @@ server.get('/watches/:id', async (req, res) => {
   }
 })
 
-server.delete('/watches/:id', async (req, res) => {
+server.delete('/watches', async (req, res) => {
   try {
-    const _id = new ObjectID(req.params.id)
-    await scheduler.cancel({ name: 'execute-watch-session', _id })
+    if (req.body.payload !== undefined) {
+      await scheduler.cancel({ name: 'execute-watch-session', data: req.body.payload })
+    }
     res.code(204)
   } catch (err) {
     req.log.error(err.message)

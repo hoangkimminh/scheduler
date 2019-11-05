@@ -68,10 +68,10 @@ Array of objects:
 - `interval` (positive integer): Number of seconds between executions
 - `payload` (any): Payload passed to the crawler
 
-#### 5. DELETE `/watches/:id`
+#### 5. DELETE `/watches`
 
-> Delete/disable the active watch with `id`
+> Delete/disable an active watch
 
-##### Route parameters
+##### Request body
 
-- `id` (ObjectID): ID of the watch
+- `payload` (object)
