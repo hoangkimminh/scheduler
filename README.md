@@ -43,7 +43,7 @@ Array of objects:
 
 - `_id` (ObjectID): ID of the watch
 - `interval` (positive integer): Number of seconds between executions
-- `payload` (any): Payload passed to the crawler
+- `payload` (object): Payload passed to the crawler
 
 #### 3. POST `/watches`
 
@@ -52,7 +52,7 @@ Array of objects:
 ##### Request body
 
 - `interval` (positive integer): Number of seconds between executions
-- `payload` (any): Payload passed to the crawler
+- `payload` (object): Payload passed to the crawler
 
 #### 4. GET `/watches/:id`
 
@@ -66,7 +66,7 @@ Array of objects:
 
 - `_id` (ObjectID): ID of the watch
 - `interval` (positive integer): Number of seconds between executions
-- `payload` (any): Payload passed to the crawler
+- `payload` (object): Payload passed to the crawler
 
 #### 5. DELETE `/watches`
 
@@ -74,4 +74,4 @@ Array of objects:
 
 ##### Request body
 
-- `payload` (object)
+- `payload` (object): Payload passed to the crawler
