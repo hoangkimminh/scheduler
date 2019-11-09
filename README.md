@@ -19,12 +19,13 @@ $ yarn start # yarn dev for development
 
 ### Environment Variables
 
+- `PORT` (number): Port number to run the server
 - `MONGODB_URI` (string): MongoDB URI
 - `CRAWLER_ADDRESS` (string): Address of crawler service
 
 ### Routes
 
-#### GET `/`
+#### 1. GET `/`
 
 > Just for testing
 
@@ -32,7 +33,7 @@ $ yarn start # yarn dev for development
 
 - `iam`: `"/"`
 
-#### GET `/watch`
+#### 2. GET `/watches`
 
 > Get all active watches
 
@@ -40,45 +41,37 @@ $ yarn start # yarn dev for development
 
 Array of objects:
 
-- `id` (string): ID of the watch
+- `_id` (ObjectID): ID of the watch
 - `interval` (positive integer): Number of seconds between executions
 - `payload` (object): Payload passed to the crawler
 
-#### POST `/watch`
+#### 3. POST `/watches`
 
-> Add a new watch
+> Schedule a watch
 
 ##### Request body
 
 - `interval` (positive integer): Number of seconds between executions
 - `payload` (object): Payload passed to the crawler
 
-##### Response body
-
-- `success` (boolean): Status
-
-#### GET `/watch/:id`
+#### 4. GET `/watches/:id`
 
 > Get the active watch with `id`
 
 ##### Route parameters
 
-- `id` (string): ID of the watch
+- `id` (ObjectID): ID of the watch
 
 ##### Response body
 
-- `id` (string): ID of the watch
+- `_id` (ObjectID): ID of the watch
 - `interval` (positive integer): Number of seconds between executions
 - `payload` (object): Payload passed to the crawler
 
-#### DELETE `/watch/:id`
+#### 5. DELETE `/watches`
 
-> Delete/disable the active watch with `id`
+> Delete/disable an active watch
 
-##### Route parameters
+##### Request body
 
-- `id` (string): ID of the watch
-
-##### Response body
-
-- `success` (boolean): Status
+- `payload` (object): Payload passed to the crawler
