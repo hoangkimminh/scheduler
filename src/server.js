@@ -1,11 +1,9 @@
-require('dotenv-flow').config()
-
 const fastify = require('fastify')
 const Agenda = require('agenda')
 const axios = require('axios')
 const { ObjectID } = require('mongodb')
 
-const { NODE_ENV, PORT, MONGODB_URI, CRAWLER_ADDRESS } = process.env
+const { NODE_ENV, PORT, MONGODB_URI, GATEWAY_ADDRESS } = process.env
 
 const loggerLevel = NODE_ENV !== 'production' ? 'debug' : 'info'
 const server = fastify({ ignoreTrailingSlash: true, logger: { level: loggerLevel } })
@@ -16,7 +14,7 @@ const scheduler = new Agenda({
 
 scheduler.define('execute-watch-session', async (job, done) => {
   try {
-    const res = await axios.post(`${CRAWLER_ADDRESS}`, job.attrs.data)
+    const res = await axios.post(`${GATEWAY_ADDRESS}/api/crawler`, job.attrs.data)
     const { success } = res.data
     if (success) done()
     else done(new Error('Failed to execute watch session')) // may add more details about the failed session later

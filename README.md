@@ -4,24 +4,17 @@
 
 ### Requirements
 
-- Node.js >= 8
+- Node.js >= 12.0.0
 - MongoDB >= 3
-- Dotenv files: `.env.production` and/or `.env.development`
-
-### Instructions
-
-```bash
-$ yarn install
-$ yarn start # yarn dev for development
-```
 
 ## DOCUMENTATION
 
 ### Environment Variables
 
+- `NODE_ENV` (string): "development" or "production" environment
 - `PORT` (number): Port number to run the server
 - `MONGODB_URI` (string): MongoDB URI
-- `CRAWLER_ADDRESS` (string): Address of crawler service
+- `GATEWAY_ADDRESS` (string): Address of the API gateway
 
 ### Routes
 
