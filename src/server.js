@@ -38,7 +38,7 @@ server.post('/watches', async (req, res) => {
     res.code(204)
   } catch (err) {
     req.log.error(err.message)
-    res.code(500)
+    res.code(500).send()
   }
 })
 
@@ -52,7 +52,7 @@ server.get('/watches', async (req, res) => {
     res.code(200).send(jobs)
   } catch (err) {
     req.log.error(err.message)
-    res.code(500)
+    res.code(500).send()
   }
 })
 
@@ -64,10 +64,10 @@ server.get('/watches/:id', async (req, res) => {
       const { _id, repeatInterval, data } = jobs[0].attrs
       return { _id, interval: repeatInterval, payload: data }
     }
-    res.code(500)
+    res.code(204)
   } catch (err) {
     req.log.error(err.message)
-    res.code(500)
+    res.code(500).send()
   }
 })
 
@@ -79,7 +79,7 @@ server.delete('/watches', async (req, res) => {
     res.code(204)
   } catch (err) {
     req.log.error(err.message)
-    res.code(500)
+    res.code(500).send()
   }
 })
 
