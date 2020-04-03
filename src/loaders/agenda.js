@@ -1,22 +1,19 @@
 const Agenda = require('agenda')
-const axios = require('axios')
+const axios = require('axios').default
 const fp = require('fastify-plugin')
 
 const { MONGODB_URI, GATEWAY_ADDRESS } = process.env
 
-const scheduler = new Agenda({
+const agenda = new Agenda({
   db: { address: MONGODB_URI },
-  processEvery: '1 minute'
+  processEvery: '1 minute',
 })
 
-scheduler.define('execute-watch-session', async (job) => {
-  const res = await axios.post(`${GATEWAY_ADDRESS}/api/crawler`, job.attrs.data)
-  const { status } = res
-  if (status < 200 || status >= 300)
-    throw new Error('Failed to execute this watch session')
+agenda.define('execute-watch-session', async (job) => {
+  await axios.post(`${GATEWAY_ADDRESS}/api/crawler`, job.attrs.data)
 })
 
 module.exports = fp(async (server) => {
-  await scheduler.start()
-  server.decorate('scheduler', scheduler)
+  await agenda.start()
+  server.decorate('agenda', agenda)
 })
