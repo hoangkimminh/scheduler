@@ -7,6 +7,7 @@ class WatchService {
 
   async create(interval, payload) {
     // interval param above is in s, interval param of agenda.every() is in ms
+    await this.deleteByPayload(payload)
     return this.agenda
       .create('execute-watch-session', payload)
       .repeatEvery(interval * 1000)
